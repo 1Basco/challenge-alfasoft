@@ -1,6 +1,19 @@
 @extends('contacts.layout')
 
 @section('content')
+
+@if ($errors->any())
+
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+        <strong class="font-bold">Some problems with your inputs</strong>
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+
+@endif
     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="flex justify-between items-center">
@@ -15,15 +28,15 @@
                     <div class="grid grid-cols-6 gap-6">
                         <div class="col-span-6 sm:col-span-4">
                             <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
-                            <input type="text" minlength="5" name="name" id="name" class="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md" required>
+                            <input type="text" minlength="6" name="name" id="name" class="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md" required>
                         </div>
                         <div class="col-span-6 sm:col-span-4">
                             <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
                             <input type="email" name="email" id="email" class="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md" required>
                         </div>
                         <div class="col-span-6 sm:col-span-4">
-                            <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number</label>
-                            <input type="tel" name="phone" id="phone" pattern="[0-9]{9}" class="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md" required>
+                            <label for="contact" class="block text-sm font-medium text-gray-700">Contact Number</label>
+                            <input type="tel" name="contact" id="contact" maxlength="9" pattern="[0-9]{9}" class="mt-1 h-8 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md" required>
                         </div>
                     </div>
                     <div class="mt-6">

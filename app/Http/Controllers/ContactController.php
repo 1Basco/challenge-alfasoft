@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Interfaces\Repositories\ContactInterface as ContactRepositoryInterface;
 use App\Models\Contact;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class ContactController extends Controller
 {
@@ -24,7 +25,7 @@ class ContactController extends Controller
     public function index()
     {
         $contacts = $this->contactRepository->getAllContacts();
-        
+
         return view('contacts.index',compact('contacts'));
     }
 
@@ -46,7 +47,19 @@ class ContactController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => ['required', 'string', 'max:255', 'min:6'],	
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:contacts'],
+            'contact' => ['required', 'string', 'max:9', 'unique:contacts'],
+        ]);
+
+        $contact = $this->contactRepository->create($request->all());
+
+        if($contact) {
+            return redirect()->route('contacts.index')->with('success', 'Contact created successfully');
+        }
+
+        return redirect()->route('contacts.index')->with('error', 'Something went wrong');
     }
 
     /**
@@ -57,7 +70,7 @@ class ContactController extends Controller
      */
     public function show(Contact $contact)
     {
-        //
+        return view('contacts.show',compact('contact'));
     }
 
     /**
@@ -68,7 +81,7 @@ class ContactController extends Controller
      */
     public function edit(Contact $contact)
     {
-        //
+        return view('contacts.edit',compact('contact'));
     }
 
     /**
@@ -80,7 +93,19 @@ class ContactController extends Controller
      */
     public function update(Request $request, Contact $contact)
     {
-        //
+        $request->validate([
+            'name' => ['required', 'string', 'max:255','min:6'],	
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('contacts')->ignore($contact->id),],
+            'contact' => ['required', 'string', 'max:9', Rule::unique('contacts')->ignore($contact->id),],
+        ]);
+
+        $updatedContact = $this->contactRepository->update($contact,$request->all());
+
+        if($updatedContact) {
+            return redirect()->route('contacts.index')->with('success', 'Contact updated successfully');
+        }
+
+        return redirect()->route('contacts.index')->with('error', 'Something went wrong');
     }
 
     /**
@@ -91,6 +116,12 @@ class ContactController extends Controller
      */
     public function destroy(Contact $contact)
     {
-        //
+        $deletedContact = $this->contactRepository->delete($contact);
+
+        if($deletedContact) {
+            return redirect()->route('contacts.index')->with('success', 'Contact deleted successfully');
+        }
+
+        return redirect()->route('contacts.index')->with('error', 'Something went wrong');
     }
 }

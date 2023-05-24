@@ -13,10 +13,10 @@
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
                                 Name
                             </th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
                                 Contact Number
                             </th>
                             <th scope="col" class="relative px-6 py-3">
@@ -34,17 +34,20 @@
                                     <div class="text-sm font-medium text-gray-900">{{ $contact->name }}</div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-500">{{ $contact->contact }}</div>
+                                    <div class="text-sm text-gray-500 font-semibold">{{ $contact->contact }}</div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <a href="{{ route('contacts.edit', $contact) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                    <a href="{{ route('contacts.edit', $contact) }}" class="text-indigo-600 hover:text-indigo-900 underline">Edit</a>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <form action="{{ route('contacts.destroy', $contact) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>
+                                        <button type="submit" class="text-red-600 hover:text-red-900 underline">Delete</button>
                                     </form>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <a href="{{ route('contacts.show', $contact) }}" class="text-green-500 hover:text-green-900 underline">Info</a>
                                 </td>
                             </tr>
                         @endforeach
