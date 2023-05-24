@@ -2,11 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Interfaces\Repositories\ContactInterface as ContactRepositoryInterface;
 use App\Models\Contact;
 use Illuminate\Http\Request;
 
 class ContactController extends Controller
 {
+    private ContactRepositoryInterface $contactRepository;
+
+    public function __construct(ContactRepositoryInterface $contactRepository)
+    {
+        $this->contactRepository = $contactRepository;
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -14,11 +23,9 @@ class ContactController extends Controller
      */
     public function index()
     {
-        $contacts = Contact::latest()->paginate(5);
-
-
-        return view('contacts.index',compact('contacts'))
-            ->with('i', (request()->input('page', 1) - 1) * 5);
+        $contacts = $this->contactRepository->getAllContacts();
+        
+        return view('contacts.index',compact('contacts'));
     }
 
     /**
@@ -28,7 +35,7 @@ class ContactController extends Controller
      */
     public function create()
     {
-        //
+        return view('contacts.create');
     }
 
     /**
