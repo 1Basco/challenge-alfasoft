@@ -50,7 +50,7 @@ class ContactController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255', 'min:6'],	
             'email' => ['required', 'string', 'email', 'max:255', 'unique:contacts'],
-            'contact' => ['required', 'string', 'max:9', 'unique:contacts'],
+            'contact' => ['required', 'string', 'min:9', 'max:9', 'unique:contacts'],
         ]);
 
         $contact = $this->contactRepository->create($request->all());
@@ -70,7 +70,10 @@ class ContactController extends Controller
      */
     public function show(Contact $contact)
     {
-        return view('contacts.show',compact('contact'));
+        if ($contact) {
+            return view('contacts.show',compact('contact'));
+        }
+        return redirect()->route('contacts.index')->with('error', 'Something went wrong, invalid user');
     }
 
     /**
@@ -96,7 +99,7 @@ class ContactController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255','min:6'],	
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('contacts')->ignore($contact->id),],
-            'contact' => ['required', 'string', 'max:9', Rule::unique('contacts')->ignore($contact->id),],
+            'contact' => ['required', 'string', 'min:9', 'max:9', Rule::unique('contacts')->ignore($contact->id),],
         ]);
 
         $updatedContact = $this->contactRepository->update($contact,$request->all());
